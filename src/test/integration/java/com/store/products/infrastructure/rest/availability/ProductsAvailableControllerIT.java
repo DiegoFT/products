@@ -1,9 +1,9 @@
-package com.store.products.infrastructure.rest.available;
+package com.store.products.infrastructure.rest.availability;
 
-import com.store.products.application.available.ProductsAvailableHandler;
+import com.store.products.application.availability.ProductsAvailableHandler;
 import com.store.products.domain.entity.Product;
-import com.store.products.domain.exception.available.InfoSourceNotFoundException;
-import com.store.products.domain.exception.available.ProductsAvailableException;
+import com.store.products.domain.exception.availability.InfoSourceNotFoundException;
+import com.store.products.domain.exception.availability.ProductsAvailableException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

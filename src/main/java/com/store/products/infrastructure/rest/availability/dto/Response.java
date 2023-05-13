@@ -1,4 +1,4 @@
-package com.store.products.infrastructure.rest.available.dto;
+package com.store.products.infrastructure.rest.availability.dto;
 
 import java.util.List;
 

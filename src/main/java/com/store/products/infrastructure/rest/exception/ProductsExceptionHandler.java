@@ -1,7 +1,7 @@
 package com.store.products.infrastructure.rest.exception;
 
-import com.store.products.domain.exception.available.InfoSourceNotFoundException;
-import com.store.products.domain.exception.available.ProductsAvailableException;
+import com.store.products.domain.exception.availability.InfoSourceNotFoundException;
+import com.store.products.domain.exception.availability.ProductsAvailableException;
 import com.store.products.infrastructure.rest.exception.dto.ErrorMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

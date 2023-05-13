@@ -1,6 +1,6 @@
-package com.store.products.infrastructure.rest.available;
+package com.store.products.infrastructure.rest.availability;
 
-import com.store.products.infrastructure.rest.available.dto.Response;
+import com.store.products.infrastructure.rest.availability.dto.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

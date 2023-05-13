@@ -1,8 +1,8 @@
-package com.store.products.infrastructure.rest.available;
+package com.store.products.infrastructure.rest.availability;
 
-import com.store.products.application.available.ProductsAvailableHandler;
-import com.store.products.infrastructure.rest.available.dto.Response;
-import com.store.products.infrastructure.rest.available.mapper.ResponseMapper;
+import com.store.products.application.availability.ProductsAvailableHandler;
+import com.store.products.infrastructure.rest.availability.dto.Response;
+import com.store.products.infrastructure.rest.availability.mapper.ResponseMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

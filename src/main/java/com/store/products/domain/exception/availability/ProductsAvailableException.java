@@ -1,4 +1,4 @@
-package com.store.products.domain.exception.available;
+package com.store.products.domain.exception.availability;
 
 import com.store.products.domain.exception.ProductsException;
 

@@ -1,4 +1,4 @@
-package com.store.products.application.available;
+package com.store.products.application.availability;
 
 import com.store.products.domain.entity.Product;
 

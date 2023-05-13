@@ -1,4 +1,4 @@
-package com.store.products.application.available;
+package com.store.products.application.availability;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
