@@ -1,4 +1,4 @@
-package com.store.products.domain.exception;
+package com.store.products.domain.shared.exception;
 
 public class ProductsException extends RuntimeException {
 

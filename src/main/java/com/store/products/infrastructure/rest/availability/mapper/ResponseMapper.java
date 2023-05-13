@@ -1,6 +1,6 @@
 package com.store.products.infrastructure.rest.availability.mapper;
 
-import com.store.products.domain.entity.Product;
+import com.store.products.domain.shared.entity.Product;
 import com.store.products.infrastructure.rest.availability.dto.Response;
 
 import java.util.Comparator;
