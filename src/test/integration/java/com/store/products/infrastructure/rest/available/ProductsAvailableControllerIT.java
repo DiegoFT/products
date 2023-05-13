@@ -1,7 +1,9 @@
 package com.store.products.infrastructure.rest.available;
 
 import com.store.products.application.available.ProductsAvailableHandler;
-import com.store.products.domain.Product;
+import com.store.products.domain.entity.Product;
+import com.store.products.domain.exception.available.InfoSourceNotFoundException;
+import com.store.products.domain.exception.available.ProductsAvailableException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -33,6 +35,24 @@ class ProductsAvailableControllerIT {
         mockMvc.perform(get("/products/available"))
             .andExpect(status().isOk())
             .andExpect(content().json(getFixtures("fixtures/json/products-available-ok.json")));
+    }
+
+    @Test
+    void given_handle_not_found_exception_when_invoke_get_available_products_then_expected_error_code_is_returned() throws Exception {
+        given(handler.handle()).willThrow(new InfoSourceNotFoundException("Some error getting product files"));
+
+        mockMvc.perform(get("/products/available"))
+            .andExpect(status().isNotFound())
+            .andExpect(content().json(getFixtures("fixtures/json/products-available-not-found.json")));
+    }
+
+    @Test
+    void given_handle_internal_exception_when_invoke_get_available_products_then_expected_error_code_is_returned() throws Exception {
+        given(handler.handle()).willThrow(new ProductsAvailableException("Other error getting product"));
+
+        mockMvc.perform(get("/products/available"))
+            .andExpect(status().isInternalServerError())
+            .andExpect(content().json(getFixtures("fixtures/json/products-available-internal-error.json")));
     }
 
     @Autowired MockMvc mockMvc;

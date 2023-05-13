@@ -1,6 +1,6 @@
 package com.store.products.application.available;
 
-import com.store.products.domain.Product;
+import com.store.products.domain.entity.Product;
 
 import java.util.List;
 
