@@ -1,0 +1,9 @@
+springdoc:
+  packages-to-scan: com.store.products.infrastructure.rest
+  api-docs:
+    path: /products/swagger
+  swagger-ui:
+    enabled: true
+    tags-sorter: alpha
+    operations-sorter: alpha
+    doc-expansion: none

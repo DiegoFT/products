@@ -1,0 +1,8 @@
+swagger:
+  api:
+    info:
+      title: Some title
+      description: Some description
+      contact:
+        name: Diego
+        email: diegoft87@gmail.com
