@@ -36,13 +36,16 @@ public class ProductsAvailableHandler {
             .filter(product -> {
                 var sizesForProduct = getSizesForProduct(product, sizeList);
                 if (sizesForProduct.isEmpty()) return false;
-                return (isBackSoon(sizesForProduct) && !hasSpecialAndNonSpecialSizes(product, sizesForProduct))
-                    || hasStock(product, sizesForProduct, stockList)
-                    || hasSpecialSizes(sizesForProduct);
+                var hasDifferentTypes = hasSpecialAndNonSpecialSizes(sizesForProduct);
+                if (isBackSoon(sizesForProduct) && !hasDifferentTypes) return true;
+                if (hasDifferentTypes) {
+                    return getSpecialSizesWithStock(sizesForProduct, stockList) > 0 && getNonSpecialSizesWithStock(sizesForProduct, stockList) > 0;
+                }
+
+                return sizesForProduct.stream().anyMatch(size -> hasStockForSize(size, stockList));
             })
             .toList();
     }
-
 
     private List<Size> getSizesForProduct(Product product, List<Size> sizeList) {
         return sizeList.stream()
@@ -53,28 +56,29 @@ public class ProductsAvailableHandler {
         return sizeList.stream().anyMatch(Size::backSoon);
     }
 
-    private boolean hasStock(Product product, List<Size> sizeList, List<Stock> stockList) {
-        return getSizesForProduct(product, sizeList).stream()
-            .anyMatch(size -> hasStockForSize(size, stockList));
-    }
-
-    private boolean hasSpecialSizes(List<Size> sizeList) {
-        return !getSpecialSizes(sizeList).isEmpty();
-    }
-
     private boolean hasStockForSize(Size size, List<Stock> stockList) {
         return stockList.stream()
             .anyMatch(stockItem -> stockItem.sizeId().equals(size.sizeId()) && stockItem.quantity() > 0);
     }
 
-    private List<Size> getSpecialSizes(List<Size> sizeList) {
+    private Integer getSpecialSizesWithStock(List<Size> sizeList, List<Stock> stockList) {
         return sizeList.stream()
             .filter(Size::special)
-            .toList();
+            .filter(size -> hasStockForSize(size, stockList))
+            .toList()
+            .size();
     }
 
-    private boolean hasSpecialAndNonSpecialSizes(Product product, List<Size> sizeList) {
-        List<Boolean> specialList = getSizesForProduct(product, sizeList).stream()
+    private Integer getNonSpecialSizesWithStock(List<Size> sizeList, List<Stock> stockList) {
+        return sizeList.stream()
+            .filter(size -> !size.special())
+            .filter(size -> hasStockForSize(size, stockList))
+            .toList()
+            .size();
+    }
+
+    private boolean hasSpecialAndNonSpecialSizes(List<Size> sizeList) {
+        var specialList = sizeList.stream()
             .map(Size::special)
             .toList();
         return frequency(specialList, true) > 0 && frequency(specialList, false) > 0;
