@@ -4,10 +4,6 @@ import com.store.products.domain.shared.exception.ProductsException;
 
 public class ProductsAvailableException extends ProductsException {
 
-    public ProductsAvailableException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
     public ProductsAvailableException(String message) {
         super(message);
     }

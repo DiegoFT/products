@@ -10,13 +10,16 @@ import java.util.List;
 
 public class CsvReaderUtils {
     public static List<CSVRecord> readCsv(String filePath, String[] headers) throws IOException {
-        var in = new FileReader(filePath);
-        var csvFormat = CSVFormat.DEFAULT.builder()
-            .setHeader(headers)
-            .setSkipHeaderRecord(true)
-            .build();
-        var records = new CSVParser(in, csvFormat);
+        try (var in = new FileReader(filePath)) {
+            var csvFormat = CSVFormat.DEFAULT.builder()
+                .setHeader(headers)
+                .setSkipHeaderRecord(true)
+                .build();
+            var parser = new CSVParser(in, csvFormat);
+            return parser.getRecords();
+        }
+    }
 
-        return records.getRecords();
+    private CsvReaderUtils() {
     }
 }

@@ -15,19 +15,27 @@ import static java.lang.Integer.parseInt;
 
 public class CsvStockMapper implements CsvRecordMapper<Stock> {
     @Override
-    public Stock mapRecord(CSVRecord record) {
-        var id = record.get(SIZE_ID);
+    public Stock mapRecord(CSVRecord csvRecord) {
+        var sizeId = csvRecord.get(SIZE_ID);
         try {
-            return new Stock(
-                id.replace(" ", ""),
-                Optional.ofNullable(record.get(QUANTITY))
-                    .map(quantity -> parseInt(quantity.trim()))
-                    .orElse(MAX_VALUE)
-            );
+            return Optional.ofNullable(sizeId)
+                .filter(id -> !id.isEmpty())
+                .map(id ->
+                    getStock(csvRecord, id)
+                ).orElse(null);
         } catch (NumberFormatException e) {
-            LOGGER.warn("Format not valid for Stock ID: {}. Skipping row", id);
+            LOGGER.warn("Format not valid for Stock ID: {}. Skipping row", sizeId);
             return null;
         }
+    }
+
+    private static Stock getStock(CSVRecord csvRecord, String id) {
+        return new Stock(
+            id,
+            Optional.ofNullable(csvRecord.get(QUANTITY))
+                .map(quantity -> parseInt(quantity.trim()))
+                .orElse(MAX_VALUE)
+        );
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CsvStockMapper.class);
