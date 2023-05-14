@@ -20,9 +20,8 @@ public class CsvStockMapper implements CsvRecordMapper<Stock> {
         try {
             return Optional.ofNullable(sizeId)
                 .filter(id -> !id.isEmpty())
-                .map(id ->
-                    getStock(csvRecord, id)
-                ).orElse(null);
+                .map(id -> getStock(csvRecord, id))
+                .orElse(null);
         } catch (NumberFormatException e) {
             LOGGER.warn("Format not valid for Stock ID: {}. Skipping row", sizeId);
             return null;

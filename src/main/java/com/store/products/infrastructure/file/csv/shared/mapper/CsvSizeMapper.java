@@ -3,6 +3,8 @@ package com.store.products.infrastructure.file.csv.shared.mapper;
 import com.store.products.domain.shared.entity.Size;
 import com.store.products.infrastructure.file.csv.utils.mapper.CsvRecordMapper;
 import org.apache.commons.csv.CSVRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.store.products.infrastructure.file.csv.shared.CsvSizeRepository.BACK_SOON;
 import static com.store.products.infrastructure.file.csv.shared.CsvSizeRepository.PRODUCT_ID;
@@ -20,6 +22,7 @@ public class CsvSizeMapper implements CsvRecordMapper<Size> {
         var productId = trimToNull(csvRecord.get(PRODUCT_ID));
 
         if (sizeId == null || productId == null) {
+            LOGGER.info("Format not valid sizeId: {} - productId: {}. Skipping row", sizeId, productId);
             return null;
         }
 
@@ -30,4 +33,7 @@ public class CsvSizeMapper implements CsvRecordMapper<Size> {
             parseBoolean(trimToEmpty(csvRecord.get(SPECIAL)))
         );
     }
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CsvSizeMapper.class);
+
 }

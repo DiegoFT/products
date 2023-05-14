@@ -7,4 +7,8 @@ public class ProductsAvailableException extends ProductsException {
     public ProductsAvailableException(String message) {
         super(message);
     }
+
+    public ProductsAvailableException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
