@@ -20,7 +20,7 @@ class CsvStockRepositoryIT {
     @MockBean Properties properties;
 
     @Test
-    void test_blanks() {
+    void stock_repository_test_blanks() {
         given(properties.getStockFilePath()).willReturn(getPath("csv/stock-blanks.csv"));
 
         var stockList = repository.findAll();
@@ -43,7 +43,7 @@ class CsvStockRepositoryIT {
     }
 
     @Test
-    void test_invalid_row() {
+    void stock_repository_test_invalid_row() {
         given(properties.getStockFilePath()).willReturn(getPath("csv/stock-invalid-row.csv"));
 
         var stockList = repository.findAll();
@@ -58,7 +58,7 @@ class CsvStockRepositoryIT {
     }
 
     @Test
-    void test_invalid_file() {
+    void stock_repository_test_invalid_file() {
         var filePath = getPath("some.file");
         given(properties.getStockFilePath()).willReturn(filePath);
 

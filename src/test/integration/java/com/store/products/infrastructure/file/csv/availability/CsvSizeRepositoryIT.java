@@ -22,7 +22,7 @@ class CsvSizeRepositoryIT {
     @MockBean Properties properties;
 
     @Test
-    void test_blanks() {
+    void size_repository_test_blanks() {
         given(properties.getSizeFilePath()).willReturn(getPath("csv/size-blanks.csv"));
 
         var sizeList = repository.findAll();
@@ -50,7 +50,7 @@ class CsvSizeRepositoryIT {
     }
 
     @Test
-    void test_invalid_row() {
+    void size_repository_test_invalid_row() {
         given(properties.getSizeFilePath()).willReturn(getPath("csv/size-invalid-row.csv"));
 
         var sizeList = repository.findAll();
@@ -67,7 +67,7 @@ class CsvSizeRepositoryIT {
     }
 
     @Test
-    void test_invalid_file() {
+    void size_repository_test_invalid_file() {
         var filePath = getPath("some.file");
         given(properties.getSizeFilePath()).willReturn(filePath);
 
