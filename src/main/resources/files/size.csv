@@ -1,0 +1,17 @@
+11, 1, true, false
+12, 1, false, false
+13, 1 , true, false
+21, 2, false, false
+22, 2, false, false
+23, 2, true, true
+31, 3, true, false
+32, 3, true, false
+33, 3, false, false
+41, 4, false, false
+42, 4, false, false
+43, 4, false, false
+44, 4, true, true
+51, 5, true, false
+52, 5, false, false
+53, 5, false, false
+54, 5, true, true

@@ -1,0 +1,5 @@
+sizeId, productId, backSoon, special
+ 23 , 2, true, false
+, , true, true
+23, , true, true
+, , ,
