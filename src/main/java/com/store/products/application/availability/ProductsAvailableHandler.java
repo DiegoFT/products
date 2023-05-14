@@ -6,8 +6,6 @@ import com.store.products.domain.shared.ProductRepository;
 import com.store.products.domain.shared.SizeRepository;
 import com.store.products.domain.shared.entity.Product;
 import com.store.products.domain.shared.entity.Size;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -33,26 +31,38 @@ public class ProductsAvailableHandler {
         var stockList = stockRepository.findAll();
 
         return productList.stream()
-            .filter(product -> {
-                var sizesForProduct = getSizesForProduct(product, sizeList);
-                if (sizesForProduct.isEmpty()) return false;
-                var hasDifferentTypes = hasSpecialAndNonSpecialSizes(sizesForProduct);
-                if (isBackSoon(sizesForProduct) && !hasDifferentTypes) return true;
-                if (hasDifferentTypes) {
-                    return getSpecialSizesWithStock(sizesForProduct, stockList) > 0 && getNonSpecialSizesWithStock(sizesForProduct, stockList) > 0;
-                }
-
-                return sizesForProduct.stream().anyMatch(size -> hasStockForSize(size, stockList));
-            })
+            .filter(product -> isAvailable(product, sizeList, stockList))
             .toList();
     }
 
-    private List<Size> getSizesForProduct(Product product, List<Size> sizeList) {
+    private boolean isAvailable(Product product, List<Size> sizeList, List<Stock> stockList) {
+        var sizesForProduct = getProductSizes(product, sizeList);
+
+        if (sizesForProduct.isEmpty()) return false;
+
+        var hasDifferentTypes = hasSpecialAndNonSpecialSizes(sizesForProduct);
+        if (hasDifferentTypes) {
+            return hasStockForDifferentSizeTypes(stockList, sizesForProduct);
+        }
+
+        return sizesForProduct.stream()
+            .anyMatch(size -> hasStockForSize(size, stockList))
+            || hasBackSoonSizes(sizesForProduct);
+    }
+
+    private boolean hasStockForDifferentSizeTypes(List<Stock> stockList, List<Size> sizesForProduct) {
+        var specialSizesWithStock = getSizesWithStock(sizesForProduct, stockList, true);
+        var nonSpecialSizesWithStock = getSizesWithStock(sizesForProduct, stockList, false);
+
+        return specialSizesWithStock > 0 && nonSpecialSizesWithStock > 0;
+    }
+
+    private List<Size> getProductSizes(Product product, List<Size> sizeList) {
         return sizeList.stream()
             .filter(size -> size.productId().equals(product.id())).toList();
     }
 
-    private boolean isBackSoon(List<Size> sizeList) {
+    private boolean hasBackSoonSizes(List<Size> sizeList) {
         return sizeList.stream().anyMatch(Size::backSoon);
     }
 
@@ -61,17 +71,9 @@ public class ProductsAvailableHandler {
             .anyMatch(stockItem -> stockItem.sizeId().equals(size.sizeId()) && stockItem.quantity() > 0);
     }
 
-    private Integer getSpecialSizesWithStock(List<Size> sizeList, List<Stock> stockList) {
+    private Integer getSizesWithStock(List<Size> sizeList, List<Stock> stockList, boolean isSpecial) {
         return sizeList.stream()
-            .filter(Size::special)
-            .filter(size -> hasStockForSize(size, stockList))
-            .toList()
-            .size();
-    }
-
-    private Integer getNonSpecialSizesWithStock(List<Size> sizeList, List<Stock> stockList) {
-        return sizeList.stream()
-            .filter(size -> !size.special())
+            .filter(size -> size.special() == isSpecial)
             .filter(size -> hasStockForSize(size, stockList))
             .toList()
             .size();
@@ -83,7 +85,5 @@ public class ProductsAvailableHandler {
             .toList();
         return frequency(specialList, true) > 0 && frequency(specialList, false) > 0;
     }
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProductsAvailableHandler.class);
 
 }

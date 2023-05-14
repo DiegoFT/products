@@ -23,7 +23,7 @@ class ProductsAvailableHandlerTest {
     @InjectMocks private ProductsAvailableHandler handler;
 
     @Test
-    void text_example() {
+    void text_statement_example() {
         List<Product> productList = List.of(
             new Product("1", 10),
             new Product("2", 7),
