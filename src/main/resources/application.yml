@@ -7,3 +7,10 @@ springdoc:
     tags-sorter: alpha
     operations-sorter: alpha
     doc-expansion: none
+
+store:
+  products:
+    csv:
+      productPath: src/main/resources/files/product.csv
+      sizePath: src/main/resources/files/size.csv
+      stockPath: src/main/resources/files/stock.csv

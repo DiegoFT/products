@@ -34,7 +34,7 @@ class ProductsAvailableControllerIT {
 
         mockMvc.perform(get("/products/available"))
             .andExpect(status().isOk())
-            .andExpect(content().json(getFixtures("fixtures/json/products-available-ok.json")));
+            .andExpect(content().json(getFixtures("json/products-available-ok.json")));
     }
 
     @Test
@@ -43,7 +43,7 @@ class ProductsAvailableControllerIT {
 
         mockMvc.perform(get("/products/available"))
             .andExpect(status().isNotFound())
-            .andExpect(content().json(getFixtures("fixtures/json/products-available-not-found.json")));
+            .andExpect(content().json(getFixtures("json/products-available-not-found.json")));
     }
 
     @Test
@@ -52,7 +52,7 @@ class ProductsAvailableControllerIT {
 
         mockMvc.perform(get("/products/available"))
             .andExpect(status().isInternalServerError())
-            .andExpect(content().json(getFixtures("fixtures/json/products-available-internal-error.json")));
+            .andExpect(content().json(getFixtures("json/products-available-internal-error.json")));
     }
 
     @Autowired MockMvc mockMvc;
