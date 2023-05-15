@@ -3,7 +3,7 @@ package com.store.products.infrastructure.file.csv.shared;
 import com.store.products.domain.shared.ProductRepository;
 import com.store.products.domain.shared.entity.Product;
 import com.store.products.infrastructure.Properties;
-import com.store.products.infrastructure.file.csv.availability.exception.CsvException;
+import com.store.products.infrastructure.file.csv.exception.CsvException;
 import com.store.products.infrastructure.file.csv.shared.mapper.CsvProductMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

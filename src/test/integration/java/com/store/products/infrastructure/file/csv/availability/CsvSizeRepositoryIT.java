@@ -1,7 +1,7 @@
 package com.store.products.infrastructure.file.csv.availability;
 
 import com.store.products.infrastructure.Properties;
-import com.store.products.infrastructure.file.csv.availability.exception.CsvException;
+import com.store.products.infrastructure.file.csv.exception.CsvException;
 import com.store.products.infrastructure.file.csv.shared.CsvSizeRepository;
 import com.store.products.infrastructure.file.csv.shared.CsvSizeRepositoryConfiguration;
 import org.junit.jupiter.api.Test;

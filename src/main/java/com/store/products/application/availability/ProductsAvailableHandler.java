@@ -2,10 +2,13 @@ package com.store.products.application.availability;
 
 import com.store.products.domain.availability.StockRepository;
 import com.store.products.domain.availability.entity.Stock;
+import com.store.products.domain.availability.exception.ProductsAvailableException;
 import com.store.products.domain.shared.ProductRepository;
 import com.store.products.domain.shared.SizeRepository;
 import com.store.products.domain.shared.entity.Product;
 import com.store.products.domain.shared.entity.Size;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -27,13 +30,24 @@ public class ProductsAvailableHandler {
     }
 
     public Set<Product> handle() {
-        var productSet = productRepository.findAll();
-        var sizeSet = sizeRepository.findAll();
-        var stockSet = stockRepository.findAll();
+        LOGGER.debug("Starting the product availability process");
 
-        return productSet.stream()
-            .filter(product -> isAvailable(product, sizeSet, stockSet))
-            .collect(Collectors.toSet());
+        try {
+            var productSet = productRepository.findAll();
+            var sizeSet = sizeRepository.findAll();
+            var stockSet = stockRepository.findAll();
+
+            var products = productSet.stream()
+                .filter(product -> isAvailable(product, sizeSet, stockSet))
+                .collect(Collectors.toSet());
+
+            LOGGER.info("Products available: {}", products.size());
+
+            return products;
+
+        } catch (RuntimeException e) {
+            throw new ProductsAvailableException("Error handling product availability process");
+        }
     }
 
     private boolean isAvailable(Product product, Set<Size> sizeSet, Set<Stock> stockSet) {
@@ -87,5 +101,7 @@ public class ProductsAvailableHandler {
             .collect(Collectors.toSet());
         return frequency(specialSet, true) > 0 && frequency(specialSet, false) > 0;
     }
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductsAvailableHandler.class);
 
 }

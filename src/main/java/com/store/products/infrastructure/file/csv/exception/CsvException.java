@@ -1,4 +1,4 @@
-package com.store.products.infrastructure.file.csv.availability.exception;
+package com.store.products.infrastructure.file.csv.exception;
 
 public class CsvException extends RuntimeException {
 

@@ -3,8 +3,8 @@ package com.store.products.infrastructure.file.csv.availability;
 import com.store.products.domain.availability.StockRepository;
 import com.store.products.domain.availability.entity.Stock;
 import com.store.products.infrastructure.Properties;
-import com.store.products.infrastructure.file.csv.availability.exception.CsvException;
 import com.store.products.infrastructure.file.csv.availability.mapper.CsvStockMapper;
+import com.store.products.infrastructure.file.csv.exception.CsvException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

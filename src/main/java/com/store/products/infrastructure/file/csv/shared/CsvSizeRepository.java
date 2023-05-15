@@ -3,7 +3,7 @@ package com.store.products.infrastructure.file.csv.shared;
 import com.store.products.domain.shared.SizeRepository;
 import com.store.products.domain.shared.entity.Size;
 import com.store.products.infrastructure.Properties;
-import com.store.products.infrastructure.file.csv.availability.exception.CsvException;
+import com.store.products.infrastructure.file.csv.exception.CsvException;
 import com.store.products.infrastructure.file.csv.shared.mapper.CsvSizeMapper;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;

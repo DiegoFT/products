@@ -1,9 +1,11 @@
 package com.store.products.application.availability;
 
 import com.store.products.domain.availability.entity.Stock;
+import com.store.products.domain.availability.exception.ProductsAvailableException;
 import com.store.products.domain.shared.entity.Product;
 import com.store.products.domain.shared.entity.Size;
 import com.store.products.infrastructure.file.csv.availability.CsvStockRepository;
+import com.store.products.infrastructure.file.csv.exception.CsvException;
 import com.store.products.infrastructure.file.csv.shared.CsvProductRepository;
 import com.store.products.infrastructure.file.csv.shared.CsvSizeRepository;
 import org.junit.jupiter.api.Test;
@@ -15,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.BDDMockito.given;
 
 
@@ -202,6 +205,14 @@ class ProductsAvailableHandlerTest {
         assertThat(results).isEmpty();
     }
 
+    @Test
+    void test_repository_exception() {
+        given(productRepository.findAll()).willThrow(CsvException.class);
+
+        assertThatExceptionOfType(ProductsAvailableException.class)
+            .isThrownBy(() -> handler.handle())
+            .withMessage("Error handling product availability process");
+    }
 
     private void givenSets(Set<Product> productSet, Set<Size> sizeSet, Set<Stock> stockSet) {
         given(productRepository.findAll()).willReturn(productSet);
