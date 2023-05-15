@@ -23,11 +23,11 @@ class CsvStockRepositoryIT {
     void stock_repository_test_blanks() {
         given(properties.getStockFilePath()).willReturn(getPath("csv/stock-blanks.csv"));
 
-        var stockList = repository.findAll();
+        var stockSet = repository.findAll();
 
-        assertThat(stockList)
+        assertThat(stockSet)
             .hasSize(3)
-            .satisfiesExactly(
+            .satisfiesExactlyInAnyOrder(
                 stock -> {
                     assertThat(stock.sizeId()).isEqualTo("11");
                     assertThat(stock.quantity()).isZero();
@@ -46,9 +46,9 @@ class CsvStockRepositoryIT {
     void stock_repository_test_invalid_row() {
         given(properties.getStockFilePath()).willReturn(getPath("csv/stock-invalid-row.csv"));
 
-        var stockList = repository.findAll();
+        var stockSet = repository.findAll();
 
-        assertThat(stockList)
+        assertThat(stockSet)
             .hasSize(1)
             .satisfiesExactly(
                 stock -> {

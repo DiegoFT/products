@@ -9,8 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.store.products.infrastructure.file.csv.utils.CsvReaderUtils.readCsv;
 
@@ -26,7 +27,7 @@ public class CsvProductRepository implements ProductRepository {
     }
 
     @Override
-    public List<Product> findAll() {
+    public Set<Product> findAll() {
         var filePath = properties.getProductFilePath();
 
         try {
@@ -35,7 +36,8 @@ public class CsvProductRepository implements ProductRepository {
 
             return readCsv(filePath, headers).stream()
                 .map(mapper::mapRecord)
-                .filter(Objects::nonNull).toList();
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
         } catch (IOException e) {
             LOGGER.error("Error reading the Product file: {}", filePath);
 

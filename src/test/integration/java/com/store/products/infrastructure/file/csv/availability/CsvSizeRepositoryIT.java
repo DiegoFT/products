@@ -25,10 +25,10 @@ class CsvSizeRepositoryIT {
     void size_repository_test_blanks() {
         given(properties.getSizeFilePath()).willReturn(getPath("csv/size-blanks.csv"));
 
-        var sizeList = repository.findAll();
+        var sizeSet = repository.findAll();
 
-        assertThat(sizeList).hasSize(3)
-            .satisfiesExactly(
+        assertThat(sizeSet).hasSize(3)
+            .satisfiesExactlyInAnyOrder(
                 size -> {
                     assertThat(size.sizeId()).isEqualTo("23");
                     assertThat(size.productId()).isEqualTo("2");
@@ -53,9 +53,9 @@ class CsvSizeRepositoryIT {
     void size_repository_test_invalid_row() {
         given(properties.getSizeFilePath()).willReturn(getPath("csv/size-invalid-row.csv"));
 
-        var sizeList = repository.findAll();
+        var sizeSet = repository.findAll();
 
-        assertThat(sizeList)
+        assertThat(sizeSet)
             .hasSize(1)
             .satisfiesExactly(
                 size -> {

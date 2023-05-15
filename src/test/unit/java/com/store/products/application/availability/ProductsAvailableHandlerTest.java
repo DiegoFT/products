@@ -12,7 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -24,14 +24,14 @@ class ProductsAvailableHandlerTest {
 
     @Test
     void text_statement_example() {
-        List<Product> productList = List.of(
+        Set<Product> productSet = Set.of(
             new Product("1", 10),
             new Product("2", 7),
             new Product("3", 15),
             new Product("4", 13),
             new Product("5", 6)
         );
-        List<Size> sizeList = List.of(
+        Set<Size> sizeSet = Set.of(
             new Size("11", "1", true, false),
             new Size("12", "1", false, false),
             new Size("13", "1", true, false),
@@ -50,7 +50,7 @@ class ProductsAvailableHandlerTest {
             new Size("53", "5", false, false),
             new Size("54", "5", true, true)
         );
-        List<Stock> stockList = List.of(
+        Set<Stock> stockSet = Set.of(
             new Stock("11", 0),
             new Stock("12", 0),
             new Stock("13", 0),
@@ -68,11 +68,11 @@ class ProductsAvailableHandlerTest {
             new Stock("54", 10)
         );
 
-        givenLists(productList, sizeList, stockList);
+        givenSets(productSet, sizeSet, stockSet);
 
         var products = handler.handle();
 
-        assertThat(products).satisfiesExactly(
+        assertThat(products).satisfiesExactlyInAnyOrder(
             result -> {
                 assertThat(result.id()).isEqualTo("1");
                 assertThat(result.priority()).isEqualTo(10);
@@ -90,12 +90,12 @@ class ProductsAvailableHandlerTest {
 
     @Test
     void test_products_without_size() {
-        var productList = List.of(
+        var productSet = Set.of(
             new Product("1", 10),
             new Product("2", 7));
-        var sizeList = List.of(new Size("11", "4", false, false));
-        var stockList = List.of(new Stock("11", 10));
-        givenLists(productList, sizeList, stockList);
+        var sizeSet = Set.of(new Size("11", "4", false, false));
+        var stockSet = Set.of(new Stock("11", 10));
+        givenSets(productSet, sizeSet, stockSet);
 
         var result = handler.handle();
 
@@ -104,12 +104,12 @@ class ProductsAvailableHandlerTest {
 
     @Test
     void test_products_with_size_with_stock() {
-        var productList = List.of(
+        var productSet = Set.of(
             new Product("1", 10),
             new Product("2", 7));
-        var sizeList = List.of(new Size("11", "2", false, false));
-        var stockList = List.of(new Stock("11", 10));
-        givenLists(productList, sizeList, stockList);
+        var sizeSet = Set.of(new Size("11", "2", false, false));
+        var stockSet = Set.of(new Stock("11", 10));
+        givenSets(productSet, sizeSet, stockSet);
 
         var results = handler.handle();
 
@@ -124,12 +124,12 @@ class ProductsAvailableHandlerTest {
 
     @Test
     void test_products_with_size_without_stock_not_coming_soon() {
-        var productList = List.of(
+        var productSet = Set.of(
             new Product("1", 10),
             new Product("2", 7));
-        var sizeList = List.of(new Size("11", "2", false, false));
-        var stockList = List.of(new Stock("11", 0));
-        givenLists(productList, sizeList, stockList);
+        var sizeSet = Set.of(new Size("11", "2", false, false));
+        var stockSet = Set.of(new Stock("11", 0));
+        givenSets(productSet, sizeSet, stockSet);
 
         var results = handler.handle();
 
@@ -138,12 +138,12 @@ class ProductsAvailableHandlerTest {
 
     @Test
     void test_products_with_size_without_stock_and_coming_soon() {
-        var productList = List.of(
+        var productSet = Set.of(
             new Product("1", 10),
             new Product("2", 7));
-        var sizeList = List.of(new Size("11", "2", true, false));
-        var stockList = List.of(new Stock("11", 0));
-        givenLists(productList, sizeList, stockList);
+        var sizeSet = Set.of(new Size("11", "2", true, false));
+        var stockSet = Set.of(new Stock("11", 0));
+        givenSets(productSet, sizeSet, stockSet);
 
         var results = handler.handle();
 
@@ -158,18 +158,18 @@ class ProductsAvailableHandlerTest {
 
     @Test
     void test_products_with_sizes_specials_with_stock_and_no_specials_with_stock() {
-        var productList = List.of(
+        var productSet = Set.of(
             new Product("3", 15),
             new Product("4", 20));
-        var sizeList = List.of(
+        var sizeSet = Set.of(
             new Size("11", "4", false, true),
             new Size("12", "4", false, false),
             new Size("13", "4", false, false));
-        var stockList = List.of(
+        var stockSet = Set.of(
             new Stock("11", 10),
             new Stock("12", 10),
             new Stock("13", 0));
-        givenLists(productList, sizeList, stockList);
+        givenSets(productSet, sizeSet, stockSet);
 
         var results = handler.handle();
 
@@ -184,18 +184,18 @@ class ProductsAvailableHandlerTest {
 
     @Test
     void test_products_with_sizes_specials_without_stock_and_no_specials_with_stock() {
-        var productList = List.of(
+        var productSet = Set.of(
             new Product("3", 15),
             new Product("4", 20));
-        var sizeList = List.of(
+        var sizeSet = Set.of(
             new Size("11", "4", false, true),
             new Size("12", "4", false, false),
             new Size("13", "4", false, false));
-        var stockList = List.of(
+        var stockSet = Set.of(
             new Stock("11", 0),
             new Stock("12", 10),
             new Stock("13", 10));
-        givenLists(productList, sizeList, stockList);
+        givenSets(productSet, sizeSet, stockSet);
 
         var results = handler.handle();
 
@@ -203,10 +203,10 @@ class ProductsAvailableHandlerTest {
     }
 
 
-    private void givenLists(List<Product> productList, List<Size> sizeList, List<Stock> stockList) {
-        given(productRepository.findAll()).willReturn(productList);
-        given(sizeRepository.findAll()).willReturn(sizeList);
-        given(stockRepository.findAll()).willReturn(stockList);
+    private void givenSets(Set<Product> productSet, Set<Size> sizeSet, Set<Stock> stockSet) {
+        given(productRepository.findAll()).willReturn(productSet);
+        given(sizeRepository.findAll()).willReturn(sizeSet);
+        given(stockRepository.findAll()).willReturn(stockSet);
     }
 
     @Mock private CsvProductRepository productRepository;

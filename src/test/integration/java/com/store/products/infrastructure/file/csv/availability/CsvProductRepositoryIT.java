@@ -25,9 +25,9 @@ class CsvProductRepositoryIT {
     void product_repository_test_blanks() {
         given(properties.getProductFilePath()).willReturn(getPath("csv/product-blanks.csv"));
 
-        var productList = repository.findAll();
+        var productSet = repository.findAll();
 
-        assertThat(productList).hasSize(2)
+        assertThat(productSet).hasSize(2)
             .satisfiesExactly(
                 product -> {
                     assertThat(product.id()).isEqualTo("12");
@@ -43,9 +43,9 @@ class CsvProductRepositoryIT {
     void product_repository_test_invalid_row() {
         given(properties.getProductFilePath()).willReturn(getPath("csv/product-invalid-row.csv"));
 
-        var productList = repository.findAll();
+        var productSet = repository.findAll();
 
-        assertThat(productList)
+        assertThat(productSet)
             .hasSize(1)
             .satisfiesExactly(
                 product -> {

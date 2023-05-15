@@ -7,7 +7,8 @@ import com.store.products.domain.shared.SizeRepository;
 import com.store.products.domain.shared.entity.Product;
 import com.store.products.domain.shared.entity.Size;
 
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.frequency;
 
@@ -25,65 +26,66 @@ public class ProductsAvailableHandler {
         this.stockRepository = stockRepository;
     }
 
-    public List<Product> handle() {
-        var productList = productRepository.findAll();
-        var sizeList = sizeRepository.findAll();
-        var stockList = stockRepository.findAll();
+    public Set<Product> handle() {
+        var productSet = productRepository.findAll();
+        var sizeSet = sizeRepository.findAll();
+        var stockSet = stockRepository.findAll();
 
-        return productList.stream()
-            .filter(product -> isAvailable(product, sizeList, stockList))
-            .toList();
+        return productSet.stream()
+            .filter(product -> isAvailable(product, sizeSet, stockSet))
+            .collect(Collectors.toSet());
     }
 
-    private boolean isAvailable(Product product, List<Size> sizeList, List<Stock> stockList) {
-        var sizesForProduct = getProductSizes(product, sizeList);
+    private boolean isAvailable(Product product, Set<Size> sizeSet, Set<Stock> stockSet) {
+        var sizesForProduct = getProductSizes(product, sizeSet);
 
         if (sizesForProduct.isEmpty()) return false;
 
         var hasDifferentTypes = hasSpecialAndNonSpecialSizes(sizesForProduct);
         if (hasDifferentTypes) {
-            return hasStockForDifferentSizeTypes(stockList, sizesForProduct);
+            return hasStockForDifferentSizeTypes(stockSet, sizesForProduct);
         }
 
         return sizesForProduct.stream()
-            .anyMatch(size -> hasStockForSize(size, stockList))
+            .anyMatch(size -> hasStockForSize(size, stockSet))
             || hasBackSoonSizes(sizesForProduct);
     }
 
-    private boolean hasStockForDifferentSizeTypes(List<Stock> stockList, List<Size> sizesForProduct) {
-        var specialSizesWithStock = getSizesWithStock(sizesForProduct, stockList, true);
-        var nonSpecialSizesWithStock = getSizesWithStock(sizesForProduct, stockList, false);
+    private boolean hasStockForDifferentSizeTypes(Set<Stock> stockSet, Set<Size> sizesForProduct) {
+        var specialSizesWithStock = getSizesWithStock(sizesForProduct, stockSet, true);
+        var nonSpecialSizesWithStock = getSizesWithStock(sizesForProduct, stockSet, false);
 
         return specialSizesWithStock > 0 && nonSpecialSizesWithStock > 0;
     }
 
-    private List<Size> getProductSizes(Product product, List<Size> sizeList) {
-        return sizeList.stream()
-            .filter(size -> size.productId().equals(product.id())).toList();
+    private Set<Size> getProductSizes(Product product, Set<Size> sizeSet) {
+        return sizeSet.stream()
+            .filter(size -> size.productId().equals(product.id()))
+            .collect(Collectors.toSet());
     }
 
-    private boolean hasBackSoonSizes(List<Size> sizeList) {
-        return sizeList.stream().anyMatch(Size::backSoon);
+    private boolean hasBackSoonSizes(Set<Size> sizeSet) {
+        return sizeSet.stream().anyMatch(Size::backSoon);
     }
 
-    private boolean hasStockForSize(Size size, List<Stock> stockList) {
-        return stockList.stream()
+    private boolean hasStockForSize(Size size, Set<Stock> stockSet) {
+        return stockSet.stream()
             .anyMatch(stockItem -> stockItem.sizeId().equals(size.sizeId()) && stockItem.quantity() > 0);
     }
 
-    private Integer getSizesWithStock(List<Size> sizeList, List<Stock> stockList, boolean isSpecial) {
-        return sizeList.stream()
+    private Integer getSizesWithStock(Set<Size> sizeSet, Set<Stock> stockSet, boolean isSpecial) {
+        return sizeSet.stream()
             .filter(size -> size.special() == isSpecial)
-            .filter(size -> hasStockForSize(size, stockList))
-            .toList()
+            .filter(size -> hasStockForSize(size, stockSet))
+            .collect(Collectors.toSet())
             .size();
     }
 
-    private boolean hasSpecialAndNonSpecialSizes(List<Size> sizeList) {
-        var specialList = sizeList.stream()
+    private boolean hasSpecialAndNonSpecialSizes(Set<Size> sizeSet) {
+        var specialSet = sizeSet.stream()
             .map(Size::special)
-            .toList();
-        return frequency(specialList, true) > 0 && frequency(specialList, false) > 0;
+            .collect(Collectors.toSet());
+        return frequency(specialSet, true) > 0 && frequency(specialSet, false) > 0;
     }
 
 }

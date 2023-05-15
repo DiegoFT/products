@@ -2,8 +2,8 @@ package com.store.products.domain.shared;
 
 import com.store.products.domain.shared.entity.Size;
 
-import java.util.List;
+import java.util.Set;
 
 public interface SizeRepository {
-    List<Size> findAll();
+    Set<Size> findAll();
 }

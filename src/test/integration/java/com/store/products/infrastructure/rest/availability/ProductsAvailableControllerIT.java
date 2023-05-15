@@ -11,7 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
+import java.util.Set;
 
 import static com.store.products.infrastructure.rest.utils.Fixtures.getFixtures;
 import static org.mockito.BDDMockito.given;
@@ -25,7 +25,7 @@ class ProductsAvailableControllerIT {
 
     @Test
     void given_api_user_when_invoke_get_available_products_then_a_list_of_products_ordered_by_sequence_are_returned() throws Exception {
-        var productsWithoutOrder = List.of(
+        var productsWithoutOrder = Set.of(
             A_PRODUCT,
             B_PRODUCT,
             C_PRODUCT

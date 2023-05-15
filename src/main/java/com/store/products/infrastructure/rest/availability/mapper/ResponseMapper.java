@@ -4,12 +4,12 @@ import com.store.products.domain.shared.entity.Product;
 import com.store.products.infrastructure.rest.availability.dto.Response;
 
 import java.util.Comparator;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public class ResponseMapper {
 
-    public Response map(List<Product> products) {
+    public Response map(Set<Product> products) {
         return new Response(
             products.stream()
                 .sorted(Comparator.comparingInt(Product::priority))

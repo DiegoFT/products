@@ -10,8 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.store.products.infrastructure.file.csv.utils.CsvReaderUtils.readCsv;
 
@@ -23,7 +24,7 @@ public class CsvSizeRepository implements SizeRepository {
     private final Properties properties;
 
     @Override
-    public List<Size> findAll() {
+    public Set<Size> findAll() {
         var filePath = properties.getSizeFilePath();
 
         try {
@@ -32,7 +33,8 @@ public class CsvSizeRepository implements SizeRepository {
 
             return readCsv(filePath, headers).stream()
                 .map(mapper::mapRecord)
-                .filter(Objects::nonNull).toList();
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
         } catch (IOException e) {
             LOGGER.error("Error reading the Size file: {}", filePath);
 
